@@ -1,5 +1,13 @@
+import { FileUpload } from "./components/DataInput/FileUpload";
+import { useFileData } from "./hooks/useFileData";
 function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  const { data, error, processFile } = useFileData();
+  return (
+    <>
+      <FileUpload onFileSelect={processFile} />
+      {data ? console.log(data) : error}
+    </>
+  );
 }
 
 export default App;
