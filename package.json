@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@tanstack/react-table": "^8.20.5",
+    "echarts": "^5.5.1",
+    "echarts-for-react": "^3.0.2",
     "lucide-react": "^0.453.0",
     "nanoid": "^5.0.7",
     "papaparse": "^5.4.1",

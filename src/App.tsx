@@ -3,11 +3,14 @@ import { FileUpload } from "./components/DataInput/FileUpload";
 import { useFileData } from "./hooks/useFileData";
 import { DataTable } from "./components/Table/DataTable";
 import { useTableData } from "./hooks/useTableData";
+import Chart from "./components/Chart/Chart";
+
 import Split from "react-split";
 
 const App: React.FC = () => {
   const { data: fileData, error, processFile } = useFileData();
   const { data, columns, updateData } = useTableData(fileData);
+  console.log(data);
 
   return (
     <div className="h-screen w-full bg-gray-50">
@@ -22,7 +25,9 @@ const App: React.FC = () => {
           {/* Chart Section */}
           <div className="overflow-auto bg-white p-4 rounded-lg shadow-sm border border-gray-200">
             <h2 className="text-lg font-semibold mb-4">Chart Section</h2>
-            <div className="h-full w-full">{/* Chart will go here */}</div>
+            <div className="h-full w-full">
+              <Chart />
+            </div>
           </div>
 
           {/* Chart Configuration Section */}
