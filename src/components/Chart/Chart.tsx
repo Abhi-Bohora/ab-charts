@@ -38,18 +38,32 @@ const DEFAULT_CONFIG: ChartConfiguration = {
   area: false,
 };
 
+const isValidHeader = (header: string): boolean => {
+  return (
+    header &&
+    typeof header === "string" &&
+    !header.startsWith("column_") &&
+    header.trim() !== ""
+  );
+};
+
 const detectDataType = (data: Record<string, any>[]): ChartConfiguration => {
   if (!data.length) return DEFAULT_CONFIG;
 
   const firstRow = data[0];
   const keys = Object.keys(firstRow).filter((k) => k !== "id");
 
-  const timeRelatedKeys = ["day", "date", "month", "year", "column_1"];
+  const timeRelatedKeys = ["day", "date", "month", "year"];
   const xAxis =
-    keys.find((key) => timeRelatedKeys.includes(key.toLowerCase())) || keys[0];
+    keys.find(
+      (key) =>
+        timeRelatedKeys.includes(key.toLowerCase()) || !isNumber(firstRow[key])
+    ) || keys[0];
 
   const series = keys
-    .filter((key) => key !== xAxis && isNumber(firstRow[key]))
+    .filter(
+      (key) => key !== xAxis && isNumber(firstRow[key]) && isValidHeader(key)
+    )
     .slice(0, 5);
 
   return {
@@ -63,9 +77,8 @@ const processData = (
   data: Record<string, any>[],
   config: ChartConfiguration
 ): ProcessedSeriesData[] => {
-  const xValues = data.map((item) => item[config.xAxis]);
-
-  return config.series.map((seriesKey) => ({
+  // Only process series with valid headers
+  return config.series.filter(isValidHeader).map((seriesKey) => ({
     name: seriesKey,
     type: config.chartType || "line",
     smooth: config.smooth,
@@ -81,6 +94,7 @@ const Chart: React.FC<ChartProps> = ({
   height = "100%",
   className = "",
 }) => {
+  console.log(data, userConfig);
   const config = useMemo(
     () => ({
       ...DEFAULT_CONFIG,
@@ -94,6 +108,7 @@ const Chart: React.FC<ChartProps> = ({
     if (isEmpty(data)) return null;
 
     const series = processData(data, config);
+
     const xAxisData = data.map((item) => item[config.xAxis]);
 
     return {
@@ -116,7 +131,7 @@ const Chart: React.FC<ChartProps> = ({
         },
       },
       legend: {
-        data: config.series,
+        data: config.series.filter(isValidHeader),
         bottom: 0,
         type: "scroll",
       },

@@ -21,16 +21,14 @@ const App: React.FC = () => {
   const { data: fileData, error, processFile } = useFileData();
   const { data, columns, updateData } = useTableData(fileData);
   const [chartConfig, setChartConfig] = useState<ChartConfig | undefined>();
-  console.log(data);
   console.log(columns);
-
   const detectChartConfig = (data: any[]) => {
     if (!data.length || !columns.length) return;
 
     const numericColumns = columns.filter(
       (col) => typeof data[0][col.accessorKey] === "number"
     );
-
+    //check if the column_name is column_1, column_2 etc than set other is xAxis than that column
     const config: ChartConfig = {
       xAxis: columns[0].accessorKey,
       series: numericColumns.slice(0, 5).map((col) => col.accessorKey),
