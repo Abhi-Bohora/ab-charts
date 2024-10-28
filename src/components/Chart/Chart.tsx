@@ -184,7 +184,7 @@ const Chart: React.FC<ChartProps> = ({
         },
       },
       series,
-      animation: true,
+      animation: false,
     };
   }, [data, config]);
 
