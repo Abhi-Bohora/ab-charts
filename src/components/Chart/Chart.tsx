@@ -168,6 +168,21 @@ const Chart: React.FC<ChartProps> = ({
           saveAsImage: {},
         },
       },
+      dataZoom: [
+        {
+          type: "inside",
+          start: 0,
+          end: 100,
+        },
+        {
+          type: "slider",
+          show: true,
+          xAxisIndex: [0],
+          bottom: 10,
+          start: 0,
+          end: 100,
+        },
+      ],
       xAxis: {
         type: "category",
         data: xAxisData,
