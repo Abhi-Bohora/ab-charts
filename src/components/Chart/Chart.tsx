@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import ReactECharts from "echarts-for-react";
-import { isEmpty, isNumber } from "lodash";
+import { isNumber } from "lodash";
 
 interface ChartConfiguration {
   xAxis: string;
@@ -94,22 +94,39 @@ const Chart: React.FC<ChartProps> = ({
   height = "100%",
   className = "",
 }) => {
-  console.log(data, userConfig);
-  const config = useMemo(
-    () => ({
+  const config = useMemo(() => {
+    if (!data || !data.length) return null;
+    return {
       ...DEFAULT_CONFIG,
       ...detectDataType(data),
       ...userConfig,
-    }),
-    [data, userConfig]
-  );
+    };
+  }, [data, userConfig]);
 
   const chartOptions = useMemo(() => {
-    if (isEmpty(data)) return null;
+    if (
+      !Array.isArray(data) ||
+      !data.length ||
+      !config.xAxis ||
+      !config.series.length
+    ) {
+      return null;
+    }
+
+    const hasValidData = data.every(
+      (item) =>
+        item[config.xAxis] !== undefined &&
+        config.series.some((series) => item[series] !== undefined)
+    );
+
+    if (!hasValidData) return null;
 
     const series = processData(data, config);
 
     const xAxisData = data.map((item) => item[config.xAxis]);
+    if (!series.length || !xAxisData.length) {
+      return null;
+    }
 
     return {
       grid: {
@@ -172,11 +189,7 @@ const Chart: React.FC<ChartProps> = ({
   }, [data, config]);
 
   if (!chartOptions) {
-    return (
-      <div className="flex items-center justify-center h-full w-full text-gray-500">
-        No data available
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -185,6 +198,7 @@ const Chart: React.FC<ChartProps> = ({
         option={chartOptions}
         style={{ height: "100%", width: "100%" }}
         opts={{ renderer: "svg" }}
+        notMerge={true} //ensure clean update
       />
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { nanoid } from "nanoid";
+import { debounce } from "lodash";
 
 interface Column {
   header: string;
@@ -9,6 +10,7 @@ interface Column {
 export const useTableData = (fileData: any) => {
   const [data, setData] = useState<any[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const normalizeHeader = (header: string): string => {
     return header
@@ -46,9 +48,7 @@ export const useTableData = (fileData: any) => {
     return accessorKey;
   };
 
-  useEffect(() => {
-    if (!fileData?.data || fileData.data.length < 2) return;
-
+  const processDataDebounced = debounce((fileData) => {
     try {
       const [headerRow, ...rows] = fileData.data;
       const existingKeys = new Set<string>();
@@ -63,12 +63,10 @@ export const useTableData = (fileData: any) => {
 
       const transformedData = rows.map((row: any[]) => {
         const rowData: any = { id: nanoid() };
-
         tableColumns.forEach((column, index) => {
           const rawValue = row[index];
           rowData[column.accessorKey] = processValue(rawValue);
         });
-
         return rowData;
       });
 
@@ -78,7 +76,23 @@ export const useTableData = (fileData: any) => {
       console.error("Error processing CSV data:", error);
       setColumns([]);
       setData([]);
+    } finally {
+      setIsProcessing(false);
     }
+  }, 300);
+
+  useEffect(() => {
+    if (!fileData?.data || fileData.data.length < 2) return;
+
+    setIsProcessing(true);
+    setData([]);
+    setColumns([]);
+
+    processDataDebounced(fileData);
+
+    return () => {
+      processDataDebounced.cancel();
+    };
   }, [fileData]);
 
   const updateData = useCallback(
@@ -102,5 +116,6 @@ export const useTableData = (fileData: any) => {
     data,
     columns,
     updateData,
+    isProcessing,
   };
 };
