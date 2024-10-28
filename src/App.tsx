@@ -36,7 +36,7 @@ const App: React.FC = () => {
     const numericColumns = columns.filter(
       (col) => typeof data[0][col.accessorKey] === "number"
     );
-    //check if the column_name is column_1, column_2 etc than set other is xAxis than that column
+
     const config: ChartConfig = {
       xAxis: columns[0].accessorKey,
       series: numericColumns.slice(0, 5).map((col) => col.accessorKey),
