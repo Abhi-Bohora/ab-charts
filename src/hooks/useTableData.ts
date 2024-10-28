@@ -23,10 +23,8 @@ export const useTableData = (fileData: any) => {
 
   const processValue = (value: string): string | number => {
     if (!value) return "";
-
     const cleanValue = value.toString().replace(/[$,]/g, "").trim();
     const numberValue = Number(cleanValue);
-
     return !isNaN(numberValue) ? numberValue : cleanValue;
   };
 
@@ -43,7 +41,6 @@ export const useTableData = (fileData: any) => {
       accessorKey = `${baseKey}_${counter}`;
       counter++;
     }
-
     existingKeys.add(accessorKey);
     return accessorKey;
   };
@@ -83,13 +80,10 @@ export const useTableData = (fileData: any) => {
 
   useEffect(() => {
     if (!fileData?.data || fileData.data.length < 2) return;
-
     setIsProcessing(true);
     setData([]);
     setColumns([]);
-
     processDataDebounced(fileData);
-
     return () => {
       processDataDebounced.cancel();
     };

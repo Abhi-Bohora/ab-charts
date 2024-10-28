@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FileUpload } from "./components/DataInput/FileUpload";
 import { useFileData } from "./hooks/useFileData";
 import { DataTable } from "./components/Table/DataTable";
 import { useTableData } from "./hooks/useTableData";
-import { useState } from "react";
 import Chart from "./components/Chart/Chart";
 import { ClipLoader } from "react-spinners";
-
 import Split from "react-split";
+
 interface ChartConfig {
   xAxis: string;
   series: string[];
@@ -22,7 +21,6 @@ const App: React.FC = () => {
   const { data: fileData, error, processFile } = useFileData();
   const { data, columns, updateData, isProcessing } = useTableData(fileData);
   const [chartConfig, setChartConfig] = useState<ChartConfig | undefined>();
-  const [isLoading, setIsLoading] = useState(false);
   const [hasFileBeenUploaded, setHasFileBeenUploaded] = useState(false);
 
   const handleFileSelect = async (file: File) => {
@@ -50,10 +48,8 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
     if (!isProcessing && data.length > 0) {
       detectChartConfig(data);
-      setIsLoading(false);
     }
   }, [data, columns, isProcessing]);
 
