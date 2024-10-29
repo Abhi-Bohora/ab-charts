@@ -6,7 +6,7 @@ import { useTableData } from "./hooks/useTableData";
 import Chart from "./components/Chart/Chart";
 import { ClipLoader } from "react-spinners";
 import Split from "react-split";
-
+import logo from "./assets/ab-charts.png";
 interface ChartConfig {
   xAxis: string;
   series: string[];
@@ -122,7 +122,12 @@ const App: React.FC = () => {
         <Split className="flex" sizes={[75, 25]} minSize={200}>
           {/* Chart Section */}
           <div className="overflow-auto bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-            <h2 className="text-lg font-semibold mb-4">Chart Section</h2>
+            <img
+              src={logo}
+              alt="logo"
+              className="h-14 w-14 object-cover rounded-full"
+              title="logo"
+            />
             <div className="h-[calc(100%-2rem)]">{renderChartContent()}</div>
           </div>
 
