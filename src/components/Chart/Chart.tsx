@@ -139,7 +139,7 @@ const Chart: React.FC<ChartProps> = ({
       title: {
         text: config.title,
         left: "center",
-        top: 10,
+        top: 0,
       },
       tooltip: {
         trigger: "axis",
@@ -149,8 +149,9 @@ const Chart: React.FC<ChartProps> = ({
       },
       legend: {
         data: config.series.filter(isValidHeader),
-        bottom: 0,
+        bottom: 5,
         type: "scroll",
+        top: 30,
       },
       toolbox: {
         right: 10,
@@ -178,7 +179,7 @@ const Chart: React.FC<ChartProps> = ({
           type: "slider",
           show: true,
           xAxisIndex: [0],
-          bottom: 10,
+          bottom: 30,
           start: 0,
           end: 100,
         },
