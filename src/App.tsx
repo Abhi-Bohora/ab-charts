@@ -112,7 +112,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-full bg-gray-50">
+    <div className="h-screen w-full bg-gray-50" data-theme="light">
       <Split
         direction="vertical"
         sizes={[70, 30]}
@@ -137,11 +137,9 @@ const App: React.FC = () => {
             {columns.length > 0 && (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    X-Axis
-                  </label>
+                  <label className="label">X-Axis</label>
                   <select
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="select select-success w-full max-w-xs"
                     value={chartConfig?.xAxis}
                     onChange={(e) =>
                       setChartConfig((prev) => ({
@@ -159,11 +157,9 @@ const App: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Chart Type
-                  </label>
+                  <label className="label">Chart Type</label>
                   <select
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="select select-success w-full max-w-xs"
                     value={chartConfig?.chartType}
                     onChange={(e) =>
                       setChartConfig((prev) => ({
@@ -177,9 +173,9 @@ const App: React.FC = () => {
                   </select>
                 </div>
 
-                <div className="space-y-2">
+                <div className="form-control">
                   {["smooth", "stack", "area"].map((option) => (
-                    <label key={option} className="flex items-center space-x-2">
+                    <label key={option} className="label cursor-pointer">
                       <input
                         type="checkbox"
                         checked={
@@ -191,11 +187,9 @@ const App: React.FC = () => {
                             [option]: e.target.checked,
                           }))
                         }
-                        className="rounded text-blue-500 focus:ring-blue-500"
+                        className="checkbox checkbox-success"
                       />
-                      <span className="text-sm text-gray-700 capitalize">
-                        {option}
-                      </span>
+                      <span className="label-text">{option}</span>
                     </label>
                   ))}
                 </div>
