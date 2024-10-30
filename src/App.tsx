@@ -134,6 +134,20 @@ const App: React.FC = () => {
           {/* Chart Configuration Section */}
           <div className="overflow-y-auto bg-white p-4 rounded-lg shadow-sm border border-gray-200">
             <h2 className="text-lg font-semibold mb-4">Chart Configuration</h2>
+            <div>
+              <label className="label">Chart Title</label>
+              <input
+                type="text"
+                className="input input-success w-full max-w-xs"
+                value={chartConfig?.title || ""}
+                onChange={(e) =>
+                  setChartConfig((prev) => ({
+                    ...prev!,
+                    title: e.target.value,
+                  }))
+                }
+              />
+            </div>
             {columns.length > 0 && (
               <div className="space-y-4">
                 <div>
