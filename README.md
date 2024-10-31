@@ -24,3 +24,8 @@ AB Charts is a user-friendly, open-source solution that helps you visualize your
 1. **Upload a CSV File**: Load your data by uploading a CSV file directly.
 2. **Select a Chart Type**: Choose from options like bar, line, pie, and more.
 3. **Customize and View**: Customize chart settings to best fit your data needs.
+
+### Note
+
+I am a solo developer working on this so bug fixes, new charts options and other different features will
+be rolling slowly but surely.
