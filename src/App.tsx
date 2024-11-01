@@ -192,9 +192,9 @@ const App: React.FC = () => {
                     <label key={option} className="label cursor-pointer">
                       <input
                         type="checkbox"
-                        checked={
-                          chartConfig?.[option as keyof ChartConfig] || false
-                        }
+                        checked={Boolean(
+                          chartConfig?.[option as keyof ChartConfig]
+                        )}
                         onChange={(e) =>
                           setChartConfig((prev) => ({
                             ...prev!,
