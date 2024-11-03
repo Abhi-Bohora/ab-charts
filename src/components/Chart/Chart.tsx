@@ -28,6 +28,7 @@ interface ProcessedSeriesData {
   stack?: string;
 }
 
+// Default configuration for the chart
 const DEFAULT_CONFIG: ChartConfiguration = {
   xAxis: "",
   series: [],
@@ -47,6 +48,7 @@ const isValidHeader = (header: string): boolean => {
   );
 };
 
+// Tries to find time-related fields for X-axis and numeric fields for series
 const detectDataType = (data: Record<string, any>[]): ChartConfiguration => {
   if (!data.length) return DEFAULT_CONFIG;
 
