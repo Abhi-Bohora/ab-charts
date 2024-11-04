@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
@@ -23,6 +23,10 @@ export const DataTable: React.FC<DataTableProps> = ({
         sortable: true,
         filter: true,
         resizable: true,
+        filterParams: {
+          buttons: ["reset", "apply"],
+          closeOnApply: true,
+        },
       })),
     [columns]
   );
@@ -31,16 +35,41 @@ export const DataTable: React.FC<DataTableProps> = ({
     () => ({
       flex: 1,
       minWidth: 100,
+      filterParams: {
+        debounceMs: 200,
+      },
     }),
     []
   );
 
-  const onCellValueChanged = (params: any) => {
-    const { data: rowData, colDef, newValue } = params;
-    onUpdate(rowData.id, colDef.field, newValue);
-  };
+  const onCellValueChanged = useCallback(
+    (params: any) => {
+      const { data: rowData, colDef, newValue } = params;
+      onUpdate(rowData.id, colDef.field, newValue);
+    },
+    [onUpdate]
+  );
 
-  if (!data.length) return null;
+  const gridOptions = useMemo(
+    () => ({
+      enableCellChangeFlash: true,
+      cacheQuickFilter: true,
+      animateRows: true,
+      pagination: true,
+      paginationPageSize: 100,
+      suppressMovableColumns: false,
+      suppressFieldDotNotation: true,
+      // Performance options
+      rowBuffer: 10,
+      maxBlocksInCache: 5,
+      maxConcurrentDatasourceRequests: 2,
+      cacheBlockSize: 100,
+      blockLoadDebounceMillis: 100,
+    }),
+    []
+  );
+
+  if (!data?.length) return null;
 
   return (
     <div className="ag-theme-alpine w-full h-[600px]">
@@ -49,13 +78,10 @@ export const DataTable: React.FC<DataTableProps> = ({
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         onCellValueChanged={onCellValueChanged}
-        animateRows={true}
+        gridOptions={gridOptions}
         rowSelection="multiple"
-        pagination={true}
-        paginationPageSize={100}
-        enableCellChangeFlash={true}
-        suppressMovableColumns={false}
-        suppressFieldDotNotation={true}
+        enableCellTextSelection={true}
+        ensureDomOrder={true}
       />
     </div>
   );
