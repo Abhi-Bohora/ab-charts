@@ -1,20 +1,11 @@
 import React, { useMemo } from "react";
 import ReactECharts from "echarts-for-react";
 import { isNumber } from "lodash";
-
-interface ChartConfiguration {
-  xAxis: string;
-  series: string[];
-  title?: string;
-  chartType?: "line" | "bar";
-  smooth?: boolean;
-  stack?: boolean;
-  area?: boolean;
-}
+import { ChartConfig } from "./ChartConfiguration";
 
 interface ChartProps {
   data: Record<string, any>[];
-  config?: ChartConfiguration;
+  config?: ChartConfig;
   height?: string;
   className?: string;
 }
@@ -29,7 +20,7 @@ interface ProcessedSeriesData {
 }
 
 // Default configuration for the chart
-const DEFAULT_CONFIG: ChartConfiguration = {
+const DEFAULT_CONFIG: ChartConfig = {
   xAxis: "",
   series: [],
   title: "Data Visualization",
@@ -49,7 +40,7 @@ const isValidHeader = (header: string): boolean => {
 };
 
 // Tries to find time-related fields for X-axis and numeric fields for series
-const detectDataType = (data: Record<string, any>[]): ChartConfiguration => {
+const detectDataType = (data: Record<string, any>[]): ChartConfig => {
   if (!data.length) return DEFAULT_CONFIG;
 
   const firstRow = data[0];
@@ -77,7 +68,7 @@ const detectDataType = (data: Record<string, any>[]): ChartConfiguration => {
 
 const processData = (
   data: Record<string, any>[],
-  config: ChartConfiguration
+  config: ChartConfig
 ): ProcessedSeriesData[] => {
   // Only process series with valid headers
   return config.series.filter(isValidHeader).map((seriesKey) => ({
